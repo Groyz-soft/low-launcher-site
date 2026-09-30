@@ -116,6 +116,10 @@
   .dl-version{font-family:var(--mono); font-size:12px; color:var(--a3); margin-top:14px; display:block;}
 
 
+  .dl-actions{display:flex; flex-direction:column; align-items:center; gap:10px;}
+  .dl-all{font-size:12.5px; color:var(--dim); text-decoration:none;}
+  .dl-all:hover{color:var(--text); text-decoration:underline;}
+
   /* ---- Feedback ---- */
   .fb{
     border-radius:22px; padding:44px;
@@ -296,9 +300,12 @@
       <div>
         <h2>Скачать LOW Launcher</h2>
         <p>Установщик для Windows. Обновления приходят сами — скачивать заново не придётся.</p>
-        <span class="dl-version">Актуальная версия — в разделе Releases на GitHub</span>
+        <span class="dl-version" id="dlVersion">Актуальная версия — в разделе Releases на GitHub</span>
       </div>
-      <a class="btn btn-primary" href="https://github.com/Groyz-soft/low-launcher/releases/latest" target="_blank" rel="noopener">Перейти к Releases →</a>
+      <div class="dl-actions">
+        <a class="btn btn-primary" id="dlBtn" href="https://github.com/Groyz-soft/low-launcher/releases/latest" target="_blank" rel="noopener">Перейти к Releases →</a>
+        <a class="dl-all" href="https://github.com/Groyz-soft/low-launcher/releases" target="_blank" rel="noopener">Все релизы</a>
+      </div>
     </div>
   </section>
 
@@ -350,6 +357,39 @@
         document.body.removeChild(t);
       }
     });
+  })();
+</script>
+<script>
+  // Прямая ссылка на .exe из последнего релиза GitHub
+  (function(){
+    var REPO='Groyz-soft/low-launcher';
+    var btn=document.getElementById('dlBtn'), ver=document.getElementById('dlVersion');
+    var KEY='low_latest_release', TTL=10*60*1000;
+
+    function apply(rel){
+      var assets=(rel.assets||[]).filter(function(a){return /\.exe$/i.test(a.name);});
+      if(!assets.length) return;
+      var pick=assets.filter(function(a){return /setup|install/i.test(a.name);})[0]||assets[0];
+      btn.href=pick.browser_download_url;
+      btn.removeAttribute('target'); btn.removeAttribute('rel');
+      btn.textContent='Скачать для Windows ↓';
+      var mb=pick.size?(pick.size/1048576).toFixed(0)+' МБ':'';
+      var date=rel.published_at?new Date(rel.published_at).toLocaleDateString('ru-RU'):'';
+      ver.textContent=[rel.tag_name, date, mb].filter(Boolean).join(' · ');
+    }
+
+    try{
+      var c=JSON.parse(sessionStorage.getItem(KEY)||'null');
+      if(c&&Date.now()-c.t<TTL){ apply(c.d); return; }
+    }catch(e){}
+
+    fetch('https://api.github.com/repos/'+REPO+'/releases/latest',{headers:{'Accept':'application/vnd.github+json'}})
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(rel){
+        apply(rel);
+        try{ sessionStorage.setItem(KEY,JSON.stringify({t:Date.now(),d:{tag_name:rel.tag_name,published_at:rel.published_at,assets:(rel.assets||[]).map(function(a){return{name:a.name,size:a.size,browser_download_url:a.browser_download_url};})}})); }catch(e){}
+      })
+      .catch(function(){ /* остаётся ссылка на страницу Releases */ });
   })();
 </script>
 </body>
