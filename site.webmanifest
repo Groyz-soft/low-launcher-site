@@ -1,0 +1,14 @@
+{
+  "name": "LOW Launcher",
+  "short_name": "LOW Launcher",
+  "description": "Лаунчер Minecraft с Ely.by, менеджером модов и темами",
+  "lang": "ru",
+  "start_url": "./",
+  "display": "browser",
+  "background_color": "#0b0e17",
+  "theme_color": "#0b0e17",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

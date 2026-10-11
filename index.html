@@ -5,16 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>LOW Launcher — лаунчер Minecraft с Ely.by, менеджером модов и темами</title>
 <meta name="description" content="LOW Launcher — сторонний лаунчер Minecraft: вход через Ely.by, изолированные сборки, менеджер модов Modrinth, автообновление, Discord Rich Presence." />
-<link rel="icon" href="data:,">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.ico?v=1" sizes="32x32">
+<link rel="icon" href="favicon.svg?v=1" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1">
+<link rel="manifest" href="site.webmanifest?v=1">
+<meta name="theme-color" content="#0b0e17">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LOW Launcher">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="LOW Launcher — лаунчер Minecraft с Ely.by, менеджером модов и темами">
+<meta property="og:description" content="LOW Launcher — сторонний лаунчер Minecraft: вход через Ely.by, изолированные сборки, менеджер модов Modrinth, автообновление, Discord Rich Presence.">
+<meta name="twitter:card" content="summary">
+<link rel="preload" href="fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
 <script>document.documentElement.classList.add('js')</script>
 <style>
   :root{
     --bg:#0b0e17; --bg-2:#0e1220;
     --panel:rgba(255,255,255,0.03); --panel-border:rgba(255,255,255,0.08);
-    --text:#eef1fb; --dim:#8b95ac; --dim-2:#5b6784;
+    --text:#eef1fb; --dim:#96a0b7; --dim-2:#8190ad;
     --a1:#6c8cff; --a2:#a06cff; --a3:#3fd0ff;
     --mono:'JetBrains Mono', monospace;
   }
@@ -27,6 +41,7 @@
     overflow-x:hidden;
   }
   a{color:inherit;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--a3); outline-offset:3px; border-radius:6px;}
   img{max-width:100%;}
 
   .bg-orb{position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:0; opacity:.35;}
@@ -38,15 +53,9 @@
   /* ---- Nav ---- */
   nav{display:flex; align-items:center; justify-content:space-between; padding:26px 0;}
   .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:16px; letter-spacing:.2px;}
-  .brand-mark{
-    width:30px; height:30px; border-radius:9px; flex-shrink:0;
-    background:linear-gradient(135deg, var(--a1), var(--a2));
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 6px 18px rgba(108,140,255,.35);
-  }
-  .brand-mark svg{width:15px; height:15px;}
+  .brand-logo{width:30px; height:30px; border-radius:9px; flex-shrink:0; box-shadow:0 6px 18px rgba(108,140,255,.35);}
   nav .links{display:flex; gap:28px; font-size:14px; color:var(--dim);}
-  nav .links a{position:relative; transition:color .2s;}
+  nav .links a{position:relative; text-decoration:none; transition:color .2s;}
   nav .links a::after{content:""; position:absolute; left:0; right:0; bottom:-4px; height:1px; background:var(--a1); transform:scaleX(0); transform-origin:left; transition:transform .25s ease;}
   nav .links a:hover{color:var(--text);}
   nav .links a:hover::after{transform:scaleX(1);}
@@ -87,10 +96,19 @@
   }
   .mock-bar{display:flex; gap:6px; padding:12px 14px; border-bottom:1px solid var(--panel-border);}
   .mock-dot{width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.12);}
-  .mock-body{display:flex; height:300px;}
+  .mock-body{display:flex; height:332px;}
   .mock-side{width:64px; background:rgba(255,255,255,.02); border-right:1px solid var(--panel-border); display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:12px;}
-  .mock-logo{width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg, var(--a1), var(--a2)); margin-bottom:6px;}
-  .mock-nav{position:relative; width:40px; height:34px; border-radius:9px; background:rgba(255,255,255,.04);}
+  .mock-logo{width:30px; height:30px; border-radius:9px; margin-bottom:6px;}
+  .mock-nav{
+    position:relative; width:40px; height:34px; border-radius:9px; background:rgba(255,255,255,.04);
+    display:flex; align-items:center; justify-content:center; color:var(--dim-2);
+    animation:icon-cycle 8s ease-in-out infinite;
+  }
+  .mock-nav svg{position:relative; z-index:1; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}
+  .mock-nav:nth-child(2){animation-delay:0s;}
+  .mock-nav:nth-child(3){animation-delay:2s;}
+  .mock-nav:nth-child(4){animation-delay:4s;}
+  .mock-nav:nth-child(5){animation-delay:6s;}
   .mock-nav::after{
     content:""; position:absolute; inset:0; border-radius:9px; opacity:0;
     background:linear-gradient(135deg, rgba(108,140,255,.3), rgba(160,108,255,.2));
@@ -100,7 +118,17 @@
   .mock-nav:nth-child(3)::after{animation-delay:2s;}
   .mock-nav:nth-child(4)::after{animation-delay:4s;}
   .mock-nav:nth-child(5)::after{animation-delay:6s;}
-  .mock-main{flex:1; padding:22px 24px; display:flex; flex-direction:column; justify-content:space-between;}
+  .mock-main{flex:1; position:relative; min-width:0; overflow:hidden;}
+  /* Four stacked mini-screens, one per sidebar item. Each fades in while its sidebar square is
+     highlighted: same 8s loop and same 0/2/4/6s offsets as .mock-nav, so they always stay in step. */
+  .mock-screen{
+    position:absolute; inset:22px 24px; display:flex; flex-direction:column; justify-content:space-between;
+    opacity:0; pointer-events:none; animation:screen-cycle 8s ease-in-out infinite;
+  }
+  .mock-screen:nth-child(1){animation-delay:0s;}
+  .mock-screen:nth-child(2){animation-delay:2s;}
+  .mock-screen:nth-child(3){animation-delay:4s;}
+  .mock-screen:nth-child(4){animation-delay:6s;}
   .mock-title{font-size:11px; color:var(--dim-2); font-family:var(--mono);}
   .mock-h{font-size:19px; font-weight:800; margin-top:6px;}
   .mock-h b{background:linear-gradient(135deg, var(--a1), var(--a2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
@@ -111,6 +139,42 @@
     box-shadow:0 10px 26px rgba(108,140,255,.35);
     animation:play-pulse 2.6s ease-in-out infinite;
   }
+
+  /* mini-screen building blocks */
+  .mock-row{display:flex; align-items:center; gap:10px; padding:7px 10px; margin-top:7px; border-radius:11px; font-size:12px; min-width:0;
+    background:rgba(255,255,255,.03); border:1px solid var(--panel-border);}
+  .mock-row.on{border-color:rgba(108,140,255,.45); background:rgba(108,140,255,.07);}
+  .mock-grow{flex:1; min-width:0;}
+  .mock-grow b{display:block; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .mock-grow small{display:block; font-size:10.5px; color:var(--dim-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .mock-badge{flex-shrink:0; font-family:var(--mono); font-size:9.5px; font-weight:600; padding:3px 7px; border-radius:6px;}
+  .mock-badge.fabric{background:rgba(63,208,255,.14); color:var(--a3);}
+  .mock-badge.forge{background:rgba(255,166,77,.14); color:#ffa64d;}
+  .mock-badge.vanilla{background:rgba(63,185,80,.14); color:#3fb950;}
+  .mock-pill{flex-shrink:0; font-size:10px; font-weight:700; padding:4px 9px; border-radius:8px; background:rgba(255,255,255,.07); color:var(--dim); white-space:nowrap;}
+  .mock-pill.accent{background:linear-gradient(135deg, var(--a1), var(--a2)); color:#fff;}
+  .mock-pill.ok{background:rgba(63,185,80,.14); color:#3fb950;}
+  .mock-ico{width:26px; height:26px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, rgba(108,140,255,.55), rgba(160,108,255,.4));}
+  .mock-ico.g{background:linear-gradient(135deg, rgba(63,208,255,.5), rgba(108,140,255,.35));}
+  .mock-ico.p{background:linear-gradient(135deg, rgba(160,108,255,.55), rgba(255,120,200,.35));}
+  .mock-foot{align-self:flex-start; margin-top:10px; padding:8px 14px; border-radius:10px; font-size:11.5px; font-weight:700; color:var(--dim);
+    border:1px dashed rgba(255,255,255,.16); background:rgba(255,255,255,.02);}
+  .mock-search{display:flex; align-items:center; gap:8px; margin-top:10px; padding:8px 11px; border-radius:11px; font-size:12px; color:var(--text);
+    background:rgba(255,255,255,.04); border:1px solid rgba(108,140,255,.4);}
+  .mock-search::after{content:""; width:1px; height:13px; background:var(--a3); animation:caret 1s steps(1) infinite;}
+  .mock-search span{color:var(--dim-2);}
+  .mock-slider{position:relative; height:5px; border-radius:5px; background:rgba(255,255,255,.1); margin:12px 2px 4px;}
+  .mock-slider b{position:absolute; left:0; top:0; bottom:0; width:28%; border-radius:5px; background:linear-gradient(90deg, var(--a1), var(--a2)); animation:mem-fill 8s ease-in-out 6s infinite;}
+  .mock-slider i{position:absolute; top:50%; left:28%; width:13px; height:13px; margin:-6.5px 0 0 -6.5px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.5); animation:mem-thumb 8s ease-in-out 6s infinite;}
+  .mock-memrow{display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; font-size:12px; color:var(--dim);}
+  .mock-val{display:inline-grid; font-family:var(--mono); font-size:12px; color:var(--text); font-weight:600;}
+  .mock-val span{grid-area:1/1; text-align:right;}
+  .mock-val .v1{animation:val-a 8s ease-in-out 6s infinite;}
+  .mock-val .v2{opacity:0; animation:val-b 8s ease-in-out 6s infinite;}
+  .mock-advice{margin-top:8px; padding:8px 10px; border-radius:10px; font-size:11px; line-height:1.45; color:#c9d1d9;
+    background:rgba(63,185,80,.08); border:1px solid rgba(63,185,80,.28);}
+  .mock-switch{flex-shrink:0; position:relative; width:26px; height:15px; border-radius:15px; background:linear-gradient(135deg, var(--a1), var(--a2));}
+  .mock-switch::after{content:""; position:absolute; top:2px; right:2px; width:11px; height:11px; border-radius:50%; background:#fff;}
 
   /* ---- Features ---- */
   .section{padding:70px 0;}
@@ -135,6 +199,7 @@
   }
   .dl h2{font-size:26px; font-weight:800; margin-bottom:10px;}
   .dl p{color:var(--dim); font-size:14.5px; max-width:420px;}
+  .dl-note{display:block; font-size:12.5px; color:var(--dim-2); max-width:440px; margin-top:14px; line-height:1.6;}
   .dl-version{font-family:var(--mono); font-size:12px; color:var(--a3); margin-top:14px; display:block;}
 
 
@@ -164,6 +229,13 @@
   @keyframes drift{to{translate:70px 50px;}}
   @keyframes drift-rev{to{translate:-60px -45px;}}
   @keyframes nav-cycle{0%{opacity:0;} 6%,22%{opacity:1;} 30%,100%{opacity:0;}}
+  @keyframes icon-cycle{0%{color:var(--dim-2);} 6%,22%{color:#dbe2ff;} 30%,100%{color:var(--dim-2);}}
+  @keyframes screen-cycle{0%,1%{opacity:0; translate:0 10px;} 7%,22%{opacity:1; translate:0 0;} 25%,100%{opacity:0; translate:0 -6px;}}
+  @keyframes caret{50%{opacity:0;}}
+  @keyframes mem-fill{0%,6%{width:28%;} 15%,100%{width:62%;}}
+  @keyframes mem-thumb{0%,6%{left:28%;} 15%,100%{left:62%;}}
+  @keyframes val-a{0%,7%{opacity:1;} 10%,100%{opacity:0;}}
+  @keyframes val-b{0%,9%{opacity:0;} 13%,100%{opacity:1;}}
   @keyframes play-pulse{
     0%,100%{box-shadow:0 10px 26px rgba(108,140,255,.35);}
     50%{box-shadow:0 12px 38px rgba(160,108,255,.6);}
@@ -176,6 +248,8 @@
     html{scroll-behavior:auto;}
     .js .reveal{opacity:1; translate:none;}
     .mock-nav:nth-child(2)::after{opacity:1;}
+    .mock-nav:nth-child(2){color:#dbe2ff;}
+    .mock-screen:nth-child(1){opacity:1;}
   }
 
   /* ---- Disclaimer ---- */
@@ -189,6 +263,10 @@
   .footer-links{display:flex; gap:22px;}
   .footer-links a:hover{color:var(--text);}
 
+  @media (max-width:400px){
+    .hide-xs{display:none;}
+  }
+
   @media (max-width:880px){
     header.hero{grid-template-columns:1fr; padding-top:36px;}
     .mock{transform:none; order:-1;}
@@ -197,6 +275,8 @@
     .feat-group{grid-template-columns:1fr; gap:12px;}
     .feat-list{grid-template-columns:1fr;}
     .dl{padding:36px 26px;}
+    .mock-screen{inset:18px 16px;}
+    .mock-pill.hide-sm{display:none;}
     .fb{grid-template-columns:1fr; padding:36px 26px;}
   }
 </style>
@@ -209,7 +289,7 @@
 <div class="wrap">
   <nav>
     <div class="brand">
-      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+      <img class="brand-logo" src="favicon.svg?v=1" alt="" width="30" height="30">
       LOW LAUNCHER
     </div>
     <div class="links">
@@ -240,20 +320,56 @@
       <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span></div>
       <div class="mock-body">
         <div class="mock-side">
-          <div class="mock-logo"></div>
-          <div class="mock-nav active"></div>
-          <div class="mock-nav"></div>
-          <div class="mock-nav"></div>
-          <div class="mock-nav"></div>
+          <img class="mock-logo" src="favicon.svg?v=1" alt="">
+          <div class="mock-nav"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="mock-nav"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></div>
+          <div class="mock-nav"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></div>
+          <div class="mock-nav"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></div>
         </div>
         <div class="mock-main">
-          <div>
-            <div class="mock-title">ДОБРО ПОЖАЛОВАТЬ</div>
-            <div class="mock-h">Играть на <b>Fabric 26.3</b></div>
-            <div class="mock-card"><span>Аккаунт</span><span>Ely.by ✓</span></div>
-            <div class="mock-card"><span>Java</span><span>Автоопределение</span></div>
+          <div class="mock-screen">
+            <div>
+              <div class="mock-title">ДОБРО ПОЖАЛОВАТЬ</div>
+              <div class="mock-h">Играть на <b>Fabric 26.3</b></div>
+              <div class="mock-card"><span>Аккаунт</span><span>Ely.by ✓</span></div>
+              <div class="mock-card"><span>Java</span><span>Автоопределение</span></div>
+            </div>
+            <div class="mock-play">ИГРАТЬ</div>
           </div>
-          <div class="mock-play">ИГРАТЬ</div>
+
+          <div class="mock-screen">
+            <div>
+              <div class="mock-title">МОИ СБОРКИ</div>
+              <div class="mock-h">Свои моды <b>у каждой</b></div>
+              <div class="mock-row on"><span class="mock-badge fabric">Fabric</span><div class="mock-grow"><b>Выживание</b><small>1.21 · 42 мода</small></div><span class="mock-pill hide-sm">Миры</span></div>
+              <div class="mock-row"><span class="mock-badge forge">Forge</span><div class="mock-grow"><b>Моды на пвп</b><small>1.20.1 · 18 модов</small></div><span class="mock-pill hide-sm">Миры</span></div>
+              <div class="mock-row hide-xs"><span class="mock-badge vanilla">Vanilla</span><div class="mock-grow"><b>Фармы</b><small>1.21 · без модов</small></div><span class="mock-pill hide-sm">Миры</span></div>
+            </div>
+            <div class="mock-foot">+ Создать сборку</div>
+          </div>
+
+          <div class="mock-screen">
+            <div>
+              <div class="mock-title">МОДЫ · MODRINTH</div>
+              <div class="mock-search"><span>🔍</span>sodium</div>
+              <div class="mock-row"><span class="mock-ico"></span><div class="mock-grow"><b>Sodium</b><small>Быстрая графика</small></div><span class="mock-pill accent">Установить</span></div>
+              <div class="mock-row"><span class="mock-ico g"></span><div class="mock-grow"><b>Lithium</b><small>Быстрее игра и сервер</small></div><span class="mock-pill ok">Установлено ✓</span></div>
+              <div class="mock-row"><span class="mock-ico p"></span><div class="mock-grow"><b>Iris Shaders</b><small>Доступно обновление</small></div><span class="mock-pill accent">Обновить</span></div>
+            </div>
+            <div class="mock-foot">Проверить обновления</div>
+          </div>
+
+          <div class="mock-screen">
+            <div>
+              <div class="mock-title">НАСТРОЙКИ</div>
+              <div class="mock-h">Память <b>под сборку</b></div>
+              <div class="mock-memrow"><span>Выделено</span><span class="mock-val"><span class="v1">3 ГБ</span><span class="v2">6 ГБ</span></span></div>
+              <div class="mock-slider"><b></b><i></i></div>
+              <div class="mock-advice">Рекомендуем 6 ГБ для сборки «Выживание» (модов: 42)</div>
+              <div class="mock-row"><div class="mock-grow"><b>Копии миров</b></div><span class="mock-switch"></span></div>
+              <div class="mock-row"><div class="mock-grow"><b>Прятать при игре</b></div><span class="mock-switch"></span></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -296,6 +412,10 @@
           <p>Сборка целиком сохраняется в .zip — можно перенести на другой компьютер или отдать другу.</p>
         </div>
         <div class="feat-item">
+          <h3>Копии миров</h3>
+          <p>Перед запуском лаунчер сохраняет изменённые миры в архив. Любую копию можно восстановить, а прежнее состояние мира при этом не теряется.</p>
+        </div>
+        <div class="feat-item">
           <h3>Модпаки в один клик</h3>
           <p>Модпак с Modrinth ставится сразу как новая сборка — версия, загрузчик и моды подбираются сами.</p>
         </div>
@@ -312,6 +432,10 @@
         <div class="feat-item">
           <h3>Зависимости подтягиваются сами</h3>
           <p>Если мод требует библиотеку — она ставится автоматически вместе с ним.</p>
+        </div>
+        <div class="feat-item">
+          <h3>Обновление модов в один клик</h3>
+          <p>Лаунчер сверяет установленные моды с Modrinth и показывает, что устарело. Обновить можно по одному или все сразу.</p>
         </div>
       </div>
     </div>
@@ -332,8 +456,16 @@
           <p>Лаунчер сам проверяет и ставит новые версии — без напоминаний зайти на сайт.</p>
         </div>
         <div class="feat-item">
-          <h3>Отчёты о вылетах</h3>
-          <p>При краше лаунчер сам находит журнал ошибки и предлагает открыть его.</p>
+          <h3>Разбор вылетов</h3>
+          <p>Если игра вылетела, лаунчер простыми словами объясняет причину (не хватило памяти, не та Java, конфликт модов) и подсказывает, что делать.</p>
+        </div>
+        <div class="feat-item">
+          <h3>Подсказка по памяти</h3>
+          <p>Лаунчер рекомендует объём оперативной памяти под вашу сборку и компьютер — гадать с ползунком не нужно.</p>
+        </div>
+        <div class="feat-item">
+          <h3>Удобная консоль</h3>
+          <p>Лог игры можно выделять и копировать, фильтровать по уровню, искать по тексту и сохранять в файл.</p>
         </div>
       </div>
     </div>
@@ -344,6 +476,7 @@
       <div>
         <h2>Скачать LOW Launcher</h2>
         <p>Установщик для Windows. Обновления приходят сами — скачивать заново не придётся.</p>
+        <span class="dl-note">Приложение пока без цифровой подписи, поэтому при первом запуске Windows может показать предупреждение SmartScreen: нажмите «Подробнее» → «Выполнить в любом случае».</span>
         <span class="dl-version" id="dlVersion">Актуальная версия — в разделе Releases на GitHub</span>
       </div>
       <div class="dl-actions">
