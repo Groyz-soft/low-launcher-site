@@ -17,7 +17,13 @@
 <meta property="og:locale" content="ru_RU">
 <meta property="og:title" content="LOW Launcher — лаунчер Minecraft с Ely.by, менеджером модов и темами">
 <meta property="og:description" content="LOW Launcher — сторонний лаунчер Minecraft: вход через Ely.by, изолированные сборки, менеджер модов Modrinth, автообновление, Discord Rich Presence.">
-<meta name="twitter:card" content="summary">
+<meta property="og:url" content="https://www.lowlauncher.ru/">
+<meta property="og:image" content="https://www.lowlauncher.ru/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LOW Launcher — кристалл-логотип на тёмном фоне">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.lowlauncher.ru/og-image.png">
 <link rel="preload" href="fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/jetbrains-mono-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
@@ -86,101 +92,135 @@
   .hero-ctas{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:22px;}
   .hero-note{font-size:12.5px; color:var(--dim-2);}
 
-  /* ---- Mockup of the actual app UI ---- */
+  /* ---- Mockup of the actual app UI (Pixel World, как в самом лаунчере) ---- */
   .mock{
-    background:linear-gradient(180deg, #131728, #0e1220);
-    border:1px solid var(--panel-border); border-radius:18px;
-    box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.02) inset;
+    --corner:rgba(120,150,255,.78); --frame:#b4c3ff;
+    --pix:'Monocraft','Manrope',sans-serif;
+    position:relative; background:#05070d;
+    border:1px solid rgba(255,255,255,.1); border-radius:10px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55), inset 1px 1px 0 rgba(255,255,255,.06), inset -1px -1px 0 rgba(0,0,0,.45);
     overflow:hidden; transform:rotate(1.2deg);
     animation:mock-in 1s cubic-bezier(.2,.7,.2,1) .25s both, float 7s ease-in-out 1.3s infinite;
   }
-  .mock-bar{display:flex; gap:6px; padding:12px 14px; border-bottom:1px solid var(--panel-border);}
-  .mock-dot{width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.12);}
-  .mock-body{display:flex; height:332px;}
-  .mock-side{width:64px; background:rgba(255,255,255,.02); border-right:1px solid var(--panel-border); display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:12px;}
-  .mock-logo{width:30px; height:30px; border-radius:9px; margin-bottom:6px;}
-  .mock-nav{
-    position:relative; width:40px; height:34px; border-radius:9px; background:rgba(255,255,255,.04);
-    display:flex; align-items:center; justify-content:center; color:var(--dim-2);
-    animation:icon-cycle 8s ease-in-out infinite;
-  }
-  .mock-nav svg{position:relative; z-index:1; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}
-  .mock-nav:nth-child(2){animation-delay:0s;}
-  .mock-nav:nth-child(3){animation-delay:2s;}
-  .mock-nav:nth-child(4){animation-delay:4s;}
-  .mock-nav:nth-child(5){animation-delay:6s;}
-  .mock-nav::after{
-    content:""; position:absolute; inset:0; border-radius:9px; opacity:0;
-    background:linear-gradient(135deg, rgba(108,140,255,.3), rgba(160,108,255,.2));
-    animation:nav-cycle 8s ease-in-out infinite;
-  }
-  .mock-nav:nth-child(2)::after{animation-delay:0s;}
-  .mock-nav:nth-child(3)::after{animation-delay:2s;}
-  .mock-nav:nth-child(4)::after{animation-delay:4s;}
-  .mock-nav:nth-child(5)::after{animation-delay:6s;}
+  .mock-scene{position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; image-rendering:crisp-edges; background:linear-gradient(180deg,#04060c,#0b1124 60%,#141c38);}
+  .mock-vig{position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 50% 42%, transparent 38%, rgba(2,4,9,.6) 100%);}
+  .mock-stars,.mock-embers{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+  .mock-stars i{position:absolute; width:3px; height:3px; background:#dfe8ff; opacity:0; animation:twinkle var(--dur,5s) ease-in-out var(--delay,0s) infinite;}
+  .mock-embers i{position:absolute; bottom:-8px; width:3px; height:3px; background:var(--c,#6c8cff); opacity:0; box-shadow:0 0 6px var(--c,#6c8cff); animation:ember var(--dur,18s) linear var(--delay,0s) infinite;}
+
+  .mock-bar{position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:8px 12px;
+    background:linear-gradient(180deg, rgba(7,10,18,.92), rgba(7,10,18,.66)); box-shadow:0 1px 0 rgba(0,0,0,.55);}
+  .mock-bar::after{content:""; position:absolute; left:0; right:0; bottom:-1px; height:1px; background:linear-gradient(90deg, transparent, #6c8cff 30%, #a06cff 70%, transparent); opacity:.55;}
+  .mock-wtitle{display:flex; align-items:center; gap:8px; font-family:var(--pix); font-weight:700; font-size:12px; letter-spacing:.1em;
+    background:linear-gradient(90deg,#fff,#bccaff,#d6c1ff); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .mock-wtitle img{width:14px; height:14px; filter:drop-shadow(0 0 5px rgba(108,140,255,.7));}
+  .mock-wctl{display:flex; gap:5px;}
+  .mock-dot{width:9px; height:9px; border-radius:2px; background:rgba(255,255,255,.14); box-shadow:inset 1px 1px 0 rgba(255,255,255,.12), inset -1px -1px 0 rgba(0,0,0,.4);}
+
+  .mock-body{position:relative; z-index:1; display:flex; height:332px;}
+  .mock-side{width:66px; background:linear-gradient(180deg, rgba(10,13,23,.82), rgba(7,9,17,.8)); border-right:1px solid rgba(255,255,255,.055);
+    box-shadow:inset -1px 0 0 rgba(0,0,0,.45), 6px 0 24px rgba(0,0,0,.3);
+    display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:13px;}
+  .mock-logo{width:30px; height:30px; border-radius:8px; margin-bottom:4px; box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 6px 18px rgba(108,140,255,.5);}
+  /* hotbar slots */
+  .mock-nav{position:relative; width:40px; height:36px; border-radius:5px; background:rgba(255,255,255,.035);
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,.075), inset -1px -1px 0 rgba(0,0,0,.5);
+    display:flex; align-items:center; justify-content:center; color:#8592ad; animation:icon-cycle 8s ease-in-out infinite;}
+  .mock-nav svg{position:relative; z-index:1; width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}
+  .mock-nav:nth-child(2){animation-delay:0s;} .mock-nav:nth-child(3){animation-delay:2s;}
+  .mock-nav:nth-child(4){animation-delay:4s;} .mock-nav:nth-child(5){animation-delay:6s;}
+  .mock-nav::after{content:""; position:absolute; inset:0; border-radius:5px; opacity:0;
+    background:linear-gradient(165deg, rgba(108,140,255,.38), rgba(160,108,255,.24));
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,.2), inset -1px -1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(5,7,13,.92), 0 0 0 4px var(--frame), 0 0 22px rgba(108,140,255,.5);
+    animation:nav-cycle 8s ease-in-out infinite;}
+  .mock-nav:nth-child(2)::after{animation-delay:0s;} .mock-nav:nth-child(3)::after{animation-delay:2s;}
+  .mock-nav:nth-child(4)::after{animation-delay:4s;} .mock-nav:nth-child(5)::after{animation-delay:6s;}
+
   .mock-main{flex:1; position:relative; min-width:0; overflow:hidden;}
-  /* Four stacked mini-screens, one per sidebar item. Each fades in while its sidebar square is
-     highlighted: same 8s loop and same 0/2/4/6s offsets as .mock-nav, so they always stay in step. */
-  .mock-screen{
-    position:absolute; inset:22px 24px; display:flex; flex-direction:column; justify-content:space-between;
-    opacity:0; pointer-events:none; animation:screen-cycle 8s ease-in-out infinite;
+  /* Four stacked mini-screens, one per hotbar slot; same 8s loop and 0/2/4/6s offsets as .mock-nav. */
+  .mock-screen{position:absolute; inset:20px 22px; display:flex; flex-direction:column; justify-content:space-between;
+    opacity:0; pointer-events:none; animation:screen-cycle 8s ease-in-out infinite;}
+  .mock-screen:nth-child(1){animation-delay:0s;} .mock-screen:nth-child(2){animation-delay:2s;}
+  .mock-screen:nth-child(3){animation-delay:4s;} .mock-screen:nth-child(4){animation-delay:6s;}
+  .mock-title{font-family:var(--pix); font-size:10px; letter-spacing:.04em; color:#a3afca; display:flex; align-items:center; gap:8px;}
+  .mock-title::before{content:""; width:7px; height:7px; flex-shrink:0; background:#6c8cff; box-shadow:0 0 9px #6c8cff, inset -2px -2px 0 rgba(0,0,0,.3);}
+  .mock-h{font-family:var(--pix); font-weight:700; font-size:16px; margin-top:8px; filter:drop-shadow(0 2px 0 rgba(0,0,0,.5));}
+  .mock-h b{background:linear-gradient(90deg,#fff,#a9bbff 62%,#cdb4ff); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .mock-h::after{content:""; display:block; width:36px; height:3px; margin:8px 0 2px; background:repeating-linear-gradient(90deg,#6c8cff 0 8px,transparent 8px 11px); box-shadow:0 0 12px rgba(108,140,255,.6);}
+
+  /* inventory panel: bevel + corner brackets */
+  .mock-card,.mock-row,.mock-advice{
+    border:1px solid rgba(255,255,255,.065); border-radius:6px;
+    background:
+      linear-gradient(var(--corner),var(--corner)) left top/9px 2px no-repeat, linear-gradient(var(--corner),var(--corner)) left top/2px 9px no-repeat,
+      linear-gradient(var(--corner),var(--corner)) right top/9px 2px no-repeat, linear-gradient(var(--corner),var(--corner)) right top/2px 9px no-repeat,
+      linear-gradient(var(--corner),var(--corner)) left bottom/9px 2px no-repeat, linear-gradient(var(--corner),var(--corner)) left bottom/2px 9px no-repeat,
+      linear-gradient(var(--corner),var(--corner)) right bottom/9px 2px no-repeat, linear-gradient(var(--corner),var(--corner)) right bottom/2px 9px no-repeat,
+      linear-gradient(180deg, rgba(21,26,42,.82), rgba(11,15,26,.86));
+    box-shadow:inset 1px 1px 0 rgba(255,255,255,.05), inset -1px -1px 0 rgba(0,0,0,.4), 0 10px 24px rgba(0,0,0,.35);
   }
-  .mock-screen:nth-child(1){animation-delay:0s;}
-  .mock-screen:nth-child(2){animation-delay:2s;}
-  .mock-screen:nth-child(3){animation-delay:4s;}
-  .mock-screen:nth-child(4){animation-delay:6s;}
-  .mock-title{font-size:11px; color:var(--dim-2); font-family:var(--mono);}
-  .mock-h{font-size:19px; font-weight:800; margin-top:6px;}
-  .mock-h b{background:linear-gradient(135deg, var(--a1), var(--a2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
-  .mock-card{background:rgba(255,255,255,.03); border:1px solid var(--panel-border); border-radius:12px; padding:12px 14px; margin-top:16px; font-size:12px; color:var(--dim); display:flex; justify-content:space-between;}
-  .mock-play{
-    align-self:flex-start; margin-top:18px; padding:11px 30px; border-radius:11px; font-weight:800; font-size:13px;
-    background:linear-gradient(135deg, var(--a1), var(--a2)); color:#fff; letter-spacing:.5px;
-    box-shadow:0 10px 26px rgba(108,140,255,.35);
-    animation:play-pulse 2.6s ease-in-out infinite;
-  }
+  .mock-card{margin-top:10px; padding:10px 13px; font-size:12px; color:#9aa6c0; display:flex; justify-content:space-between; align-items:center;}
+  .mock-card span:last-child{font-family:var(--pix); font-size:10.5px; color:#e4eaff;}
+  .mock-row{display:flex; align-items:center; gap:10px; padding:7px 10px; margin-top:7px; font-size:12px; min-width:0;}
+  .mock-row.on{border-color:rgba(108,140,255,.5); box-shadow:inset 1px 1px 0 rgba(255,255,255,.07), inset -1px -1px 0 rgba(0,0,0,.4), 0 0 18px rgba(108,140,255,.16);}
+
+  /* the chunky pressable PLAY block */
+  .mock-play{align-self:flex-start; margin-top:12px; padding:10px 30px 14px; border-radius:6px; font-family:var(--pix); font-weight:700; font-size:15px; letter-spacing:.08em; color:#fff;
+    background:linear-gradient(180deg,#a9bbff 0%,#6c8cff 42%,#a06cff 100%); text-shadow:0 2px 0 rgba(0,0,0,.38);
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.4), inset 0 -5px 0 rgba(0,0,0,.27), 0 0 0 1px rgba(0,0,0,.55), 0 10px 26px rgba(108,140,255,.4);
+    animation:play-press 2.8s ease-in-out infinite;}
+  @keyframes play-press{0%,70%,100%{transform:translateY(0);} 78%{transform:translateY(2px); box-shadow:inset 0 2px 0 rgba(255,255,255,.3), inset 0 -2px 0 rgba(0,0,0,.27), 0 0 0 1px rgba(0,0,0,.55), 0 4px 14px rgba(108,140,255,.4);} 88%{transform:translateY(0);}}
+
+  /* XP-bar progress */
+  .mock-xpl{display:flex; justify-content:space-between; margin-top:12px; font-family:var(--pix); font-size:9.5px; color:#a3afca;}
+  .mock-xp{position:relative; height:13px; margin-top:6px; border-radius:3px; background:#04060b; box-shadow:inset 0 2px 5px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.09); overflow:hidden;}
+  .mock-xp b{position:absolute; left:0; top:0; bottom:0; width:12%; border-radius:2px; background:linear-gradient(180deg,#cfeaff 0%,#3fd0ff 22%,#6c8cff 62%,#a06cff 100%); box-shadow:0 0 14px rgba(108,140,255,.7), inset 0 1px 0 rgba(255,255,255,.45); animation:xp-fill 8s ease-in-out infinite;}
+  .mock-xp::after{content:""; position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 12px, rgba(0,0,0,.5) 12px 14px);}
+  @keyframes xp-fill{0%{width:10%;} 20%,100%{width:100%;}}
 
   /* mini-screen building blocks */
-  .mock-row{display:flex; align-items:center; gap:10px; padding:7px 10px; margin-top:7px; border-radius:11px; font-size:12px; min-width:0;
-    background:rgba(255,255,255,.03); border:1px solid var(--panel-border);}
-  .mock-row.on{border-color:rgba(108,140,255,.45); background:rgba(108,140,255,.07);}
   .mock-grow{flex:1; min-width:0;}
   .mock-grow b{display:block; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .mock-grow small{display:block; font-size:10.5px; color:var(--dim-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .mock-badge{flex-shrink:0; font-family:var(--mono); font-size:9.5px; font-weight:600; padding:3px 7px; border-radius:6px;}
-  .mock-badge.fabric{background:rgba(63,208,255,.14); color:var(--a3);}
+  .mock-grow small{display:block; font-size:10.5px; color:#8190ad; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .mock-badge{flex-shrink:0; font-family:var(--pix); font-size:9px; padding:3px 6px; border-radius:3px;}
+  .mock-badge.fabric{background:rgba(63,208,255,.14); color:#3fd0ff;}
   .mock-badge.forge{background:rgba(255,166,77,.14); color:#ffa64d;}
   .mock-badge.vanilla{background:rgba(63,185,80,.14); color:#3fb950;}
-  .mock-pill{flex-shrink:0; font-size:10px; font-weight:700; padding:4px 9px; border-radius:8px; background:rgba(255,255,255,.07); color:var(--dim); white-space:nowrap;}
-  .mock-pill.accent{background:linear-gradient(135deg, var(--a1), var(--a2)); color:#fff;}
+  .mock-pill{flex-shrink:0; font-size:10px; font-weight:700; padding:4px 9px; border-radius:4px; background:rgba(255,255,255,.07); color:#9aa6c0; white-space:nowrap; box-shadow:inset 0 1px 0 rgba(255,255,255,.08), inset 0 -2px 0 rgba(0,0,0,.35);}
+  .mock-pill.accent{background:linear-gradient(180deg,#8ea4ff,#6c8cff 45%,#a06cff); color:#fff; text-shadow:0 1px 0 rgba(0,0,0,.35); box-shadow:inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.45);}
   .mock-pill.ok{background:rgba(63,185,80,.14); color:#3fb950;}
-  .mock-ico{width:26px; height:26px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, rgba(108,140,255,.55), rgba(160,108,255,.4));}
-  .mock-ico.g{background:linear-gradient(135deg, rgba(63,208,255,.5), rgba(108,140,255,.35));}
-  .mock-ico.p{background:linear-gradient(135deg, rgba(160,108,255,.55), rgba(255,120,200,.35));}
-  .mock-foot{align-self:flex-start; margin-top:10px; padding:8px 14px; border-radius:10px; font-size:11.5px; font-weight:700; color:var(--dim);
-    border:1px dashed rgba(255,255,255,.16); background:rgba(255,255,255,.02);}
-  .mock-search{display:flex; align-items:center; gap:8px; margin-top:10px; padding:8px 11px; border-radius:11px; font-size:12px; color:var(--text);
-    background:rgba(255,255,255,.04); border:1px solid rgba(108,140,255,.4);}
-  .mock-search::after{content:""; width:1px; height:13px; background:var(--a3); animation:caret 1s steps(1) infinite;}
-  .mock-search span{color:var(--dim-2);}
-  .mock-slider{position:relative; height:5px; border-radius:5px; background:rgba(255,255,255,.1); margin:12px 2px 4px;}
-  .mock-slider b{position:absolute; left:0; top:0; bottom:0; width:28%; border-radius:5px; background:linear-gradient(90deg, var(--a1), var(--a2)); animation:mem-fill 8s ease-in-out 6s infinite;}
-  .mock-slider i{position:absolute; top:50%; left:28%; width:13px; height:13px; margin:-6.5px 0 0 -6.5px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.5); animation:mem-thumb 8s ease-in-out 6s infinite;}
-  .mock-memrow{display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; font-size:12px; color:var(--dim);}
-  .mock-val{display:inline-grid; font-family:var(--mono); font-size:12px; color:var(--text); font-weight:600;}
+  /* block icons with bevel */
+  .mock-ico{width:26px; height:26px; border-radius:3px; flex-shrink:0; background:linear-gradient(135deg,#6c8cff,#7a58d8); box-shadow:inset 2px 2px 0 rgba(255,255,255,.25), inset -2px -2px 0 rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.5);}
+  .mock-ico.g{background:linear-gradient(135deg,#3fd0ff,#3b6fd8);}
+  .mock-ico.p{background:linear-gradient(135deg,#a06cff,#e060b0);}
+  .mock-foot{align-self:flex-start; margin-top:10px; padding:8px 14px; border-radius:6px; font-size:11.5px; font-weight:700; color:#9aa6c0;
+    border:1px dashed rgba(255,255,255,.18); background:rgba(255,255,255,.025);}
+  /* inset text field */
+  .mock-search{display:flex; align-items:center; gap:8px; margin-top:10px; padding:8px 11px; border-radius:6px; font-size:12px; color:var(--text);
+    background:#070a12; border:1px solid rgba(108,140,255,.5); box-shadow:inset 0 2px 5px rgba(0,0,0,.6), 0 0 0 2px rgba(108,140,255,.18);}
+  .mock-search::after{content:""; width:2px; height:13px; background:#3fd0ff; animation:caret 1s steps(1) infinite;}
+  .mock-search span{color:#8190ad;}
+  /* slider with a block thumb */
+  .mock-slider{position:relative; height:6px; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.08); margin:14px 2px 6px;}
+  .mock-slider b{position:absolute; left:0; top:0; bottom:0; width:28%; background:linear-gradient(90deg,#6c8cff,#a06cff); animation:mem-fill 8s ease-in-out 6s infinite;}
+  .mock-slider i{position:absolute; top:50%; left:28%; width:12px; height:20px; margin:-10px 0 0 -6px; border-radius:3px;
+    background:linear-gradient(180deg,#a9bbff,#a06cff); box-shadow:inset 0 1px 0 rgba(255,255,255,.5), inset 0 -3px 0 rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.6), 0 4px 10px rgba(0,0,0,.5); animation:mem-thumb 8s ease-in-out 6s infinite;}
+  .mock-memrow{display:flex; justify-content:space-between; align-items:baseline; margin-top:12px; font-size:12px; color:#9aa6c0;}
+  .mock-val{display:inline-grid; font-family:var(--pix); font-size:12px; color:var(--text); font-weight:700;}
   .mock-val span{grid-area:1/1; text-align:right;}
   .mock-val .v1{animation:val-a 8s ease-in-out 6s infinite;}
   .mock-val .v2{opacity:0; animation:val-b 8s ease-in-out 6s infinite;}
-  .mock-advice{margin-top:8px; padding:8px 10px; border-radius:10px; font-size:11px; line-height:1.45; color:#c9d1d9;
-    background:rgba(63,185,80,.08); border:1px solid rgba(63,185,80,.28);}
-  .mock-switch{flex-shrink:0; position:relative; width:26px; height:15px; border-radius:15px; background:linear-gradient(135deg, var(--a1), var(--a2));}
-  .mock-switch::after{content:""; position:absolute; top:2px; right:2px; width:11px; height:11px; border-radius:50%; background:#fff;}
+  .mock-advice{margin-top:8px; padding:8px 10px; font-size:11px; line-height:1.45; color:#c9d1d9; border-color:rgba(63,185,80,.3);}
+  /* block lever switch */
+  .mock-switch{flex-shrink:0; position:relative; width:34px; height:17px; border-radius:3px; background:linear-gradient(180deg,#6c8cff,#a06cff); box-shadow:inset 0 2px 5px rgba(0,0,0,.35), 0 0 0 1px rgba(0,0,0,.45);}
+  .mock-switch::after{content:""; position:absolute; top:3px; right:3px; width:11px; height:11px; border-radius:2px; background:#fff; box-shadow:inset 0 -2px 0 rgba(0,0,0,.22), 0 1px 3px rgba(0,0,0,.5);}
 
   /* ---- Features ---- */
   .section{padding:70px 0;}
   .section-head{max-width:560px; margin-bottom:44px;}
   .section-head .eyebrow{margin-bottom:10px;}
   .section-head h2{font-size:30px; font-weight:800; letter-spacing:-.3px;}
+  .section-head h2::after{content:""; display:block; width:44px; height:4px; margin-top:14px; background:repeating-linear-gradient(90deg,var(--a1) 0 10px,transparent 10px 14px); box-shadow:0 0 14px rgba(108,140,255,.55);}
   .section-head p{color:var(--dim); margin-top:10px; font-size:15px;}
 
   .feat-group{display:grid; grid-template-columns:200px 1fr; gap:28px; padding:28px 0; border-top:1px solid var(--panel-border);}
@@ -221,7 +261,50 @@
   .fb-actions{display:flex; flex-direction:column; gap:10px;}
   .fb-actions .btn{justify-content:center; font-family:inherit;}
 
+
+  /* ---- Brand logo: мягкие эффекты (дыхание свечения, редкий блик, пиксельные искры, прыжок при наведении) ---- */
+  .brand{gap:12px;}
+  .brand-mark{position:relative; display:inline-block; width:32px; height:32px; flex-shrink:0;}
+  .brand-logo-wrap{position:absolute; inset:0; border-radius:9px; overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 6px 18px rgba(108,140,255,.32);
+    animation:logo-breathe 5s ease-in-out infinite;}
+  .brand-logo-wrap .brand-logo{display:block; width:100%; height:100%; border-radius:0; box-shadow:none;}
+  .brand-logo-wrap::after{content:""; position:absolute; top:-20%; bottom:-20%; left:-70%; width:38%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.7), transparent); transform:skewX(-20deg);
+    animation:logo-sheen 9s ease-in-out 2s infinite;}
+  .brand-fx{position:absolute; inset:0; pointer-events:none;}
+  .brand-fx i{position:absolute; bottom:60%; width:3px; height:3px; background:var(--c,#9fb2ff); opacity:0; box-shadow:0 0 6px var(--c,#9fb2ff);
+    animation:logo-ember 6.5s linear infinite;}
+  .brand-fx i:nth-child(1){left:18%; --c:#8fa6ff; animation-delay:0s;}
+  .brand-fx i:nth-child(2){left:52%; --c:#c4a2ff; animation-delay:2.2s; width:2px; height:2px;}
+  .brand-fx i:nth-child(3){left:80%; --c:#6fdcff; animation-delay:4.3s;}
+  .brand:hover .brand-logo-wrap{animation:logo-breathe 5s ease-in-out infinite, logo-hop .55s steps(5) 1;}
+  .brand:hover .brand-logo-wrap::after{animation:logo-sheen .9s ease-out 1;}
+  .brand-name{font-family:'Monocraft','Manrope',sans-serif; font-weight:700; font-size:15px; letter-spacing:.1em;
+    background:linear-gradient(90deg,#fff,#c9d4ff 60%,#d9c6ff); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  @keyframes logo-breathe{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 6px 16px rgba(108,140,255,.28);} 50%{box-shadow:0 0 0 1px rgba(255,255,255,.18), 0 8px 26px rgba(160,108,255,.5);}}
+  @keyframes logo-sheen{0%{left:-70%;} 12%,100%{left:150%;}}
+  @keyframes logo-ember{0%{transform:translate(0,0); opacity:0;} 12%{opacity:.8;} 70%{opacity:.35;} 100%{transform:translate(var(--dx,6px),-30px); opacity:0;}}
+  .brand-fx i:nth-child(2){--dx:-7px;}
+  @keyframes logo-hop{0%{transform:translateY(0);} 30%{transform:translateY(-4px);} 60%{transform:translateY(0);} 80%{transform:translateY(-1px);} 100%{transform:translateY(0);}}
+
+  /* ---- What's new ---- */
+  .wn{margin-top:18px; border-radius:18px; padding:26px 30px; background:var(--panel); border:1px solid var(--panel-border);}
+  .wn[hidden]{display:none;}
+  .wn-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+  .wn-head h3{font-size:17px; font-weight:800;}
+  .wn-ver{font-family:var(--mono); font-size:12px; color:var(--a3);}
+  .wn-sec{font-family:var(--mono); font-size:11.5px; letter-spacing:.3px; color:var(--a3); margin:14px 0 6px;}
+  .wn ul{list-style:none; display:grid; gap:8px;}
+  .wn li{position:relative; padding-left:18px; font-size:13.5px; color:var(--dim); line-height:1.55;}
+  .wn li::before{content:""; position:absolute; left:2px; top:.62em; width:6px; height:6px; border-radius:2px; background:linear-gradient(135deg,var(--a1),var(--a2));}
+  .wn-more{display:inline-block; margin-top:14px; font-size:12.5px; color:var(--dim); text-decoration:none;}
+  .wn-more:hover{color:var(--text); text-decoration:underline;}
+  @media (max-width:880px){ .wn{padding:22px 20px;} }
+
   /* ---- Animations ---- */
+  @keyframes twinkle{0%,100%{opacity:0;} 50%{opacity:.85;}}
+  @keyframes ember{0%{transform:translate3d(0,0,0) rotate(45deg); opacity:0;} 10%{opacity:.7;} 85%{opacity:.35;} 100%{transform:translate3d(var(--dx,30px),-380px,0) rotate(225deg); opacity:0;}}
   @keyframes rise{from{opacity:0; translate:0 18px;} to{opacity:1; translate:0 0;}}
   @keyframes mock-in{from{opacity:0; scale:.94;} to{opacity:1; scale:1;}}
   @keyframes float{0%,100%{translate:0 0;} 50%{translate:0 -10px;}}
@@ -250,6 +333,9 @@
     .mock-nav:nth-child(2)::after{opacity:1;}
     .mock-nav:nth-child(2){color:#dbe2ff;}
     .mock-screen:nth-child(1){opacity:1;}
+    .mock-xp b{width:100%;}
+    .mock-stars i{opacity:.5;}
+    .mock-embers{display:none;}
   }
 
   /* ---- Disclaimer ---- */
@@ -289,8 +375,8 @@
 <div class="wrap">
   <nav>
     <div class="brand">
-      <img class="brand-logo" src="favicon.svg?v=1" alt="" width="30" height="30">
-      LOW LAUNCHER
+      <span class="brand-mark"><span class="brand-logo-wrap"><img class="brand-logo" src="favicon.svg?v=1" alt="" width="32" height="32"></span><span class="brand-fx" aria-hidden="true"><i></i><i></i><i></i></span></span>
+      <span class="brand-name">LOW LAUNCHER</span>
     </div>
     <div class="links">
       <a href="#features">Возможности</a>
@@ -317,7 +403,14 @@
     </div>
 
     <div class="mock" aria-hidden="true">
-      <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span></div>
+      <canvas class="mock-scene" id="mockScene"></canvas>
+      <div class="mock-stars" id="mockStars"></div>
+      <div class="mock-embers" id="mockEmbers"></div>
+      <div class="mock-vig"></div>
+      <div class="mock-bar">
+        <div class="mock-wtitle"><img src="favicon.svg?v=1" alt="">LOW LAUNCHER</div>
+        <div class="mock-wctl"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span></div>
+      </div>
       <div class="mock-body">
         <div class="mock-side">
           <img class="mock-logo" src="favicon.svg?v=1" alt="">
@@ -332,7 +425,8 @@
               <div class="mock-title">ДОБРО ПОЖАЛОВАТЬ</div>
               <div class="mock-h">Играть на <b>Fabric 26.3</b></div>
               <div class="mock-card"><span>Аккаунт</span><span>Ely.by ✓</span></div>
-              <div class="mock-card"><span>Java</span><span>Автоопределение</span></div>
+              <div class="mock-xpl"><span>Загрузка ресурсов</span><span>готово</span></div>
+              <div class="mock-xp"><b></b></div>
             </div>
             <div class="mock-play">ИГРАТЬ</div>
           </div>
@@ -445,7 +539,11 @@
       <div class="feat-list">
         <div class="feat-item">
           <h3>Темы оформления</h3>
-          <p>Несколько готовых тем или свои цвета — на выбор.</p>
+          <p>Пиксельный мир на фоне: ночное небо, блочные холмы, факелы. Несколько готовых тем или свои цвета — на выбор.</p>
+        </div>
+        <div class="feat-item">
+          <h3>Анимированный запуск</h3>
+          <p>Лаунчер стартует с эффектной заставкой, а основное окно открывается, когда всё уже загружено. Заставку можно отключить.</p>
         </div>
         <div class="feat-item">
           <h3>Discord Rich Presence</h3>
@@ -483,6 +581,12 @@
         <a class="btn btn-primary" id="dlBtn" href="https://github.com/Groyz-soft/low-launcher/releases/latest" target="_blank" rel="noopener">Перейти к Releases →</a>
         <a class="dl-all" href="https://github.com/Groyz-soft/low-launcher/releases" target="_blank" rel="noopener">Все релизы</a>
       </div>
+    </div>
+
+    <div class="wn reveal" id="whatsNew" hidden>
+      <div class="wn-head"><h3>Что нового</h3><span class="wn-ver" id="wnVer"></span></div>
+      <div id="wnBody"></div>
+      <a class="wn-more" href="https://github.com/Groyz-soft/low-launcher/releases" target="_blank" rel="noopener">История версий на GitHub →</a>
     </div>
   </section>
 
@@ -553,6 +657,32 @@
       var mb=pick.size?(pick.size/1048576).toFixed(0)+' МБ':'';
       var date=rel.published_at?new Date(rel.published_at).toLocaleDateString('ru-RU'):'';
       ver.textContent=[rel.tag_name, date, mb].filter(Boolean).join(' · ');
+      renderNotes(rel);
+    }
+
+    // Заметки релиза (Markdown из RELEASE.md) показываем как простой список. Только textContent:
+    // текст приходит из внешнего источника, поэтому никакого innerHTML.
+    function clean(t){ return t.replace(/\*\*(.+?)\*\*/g,'$1').replace(/`([^`]+)`/g,'$1').replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').trim(); }
+    function renderNotes(rel){
+      var box=document.getElementById('whatsNew'), body=document.getElementById('wnBody');
+      if(!box||!body||!rel.body) return;
+      var lines=String(rel.body).split(/\r?\n/), ul=null, count=0;
+      body.textContent='';
+      for(var i=0;i<lines.length;i++){
+        var l=lines[i].trim(), m;
+        if(!l||/^#\s/.test(l)) continue;
+        if((m=/^#{2,3}\s+(.*)$/.exec(l))){
+          if(/установк|install/i.test(m[1])) break;
+          var h=document.createElement('div'); h.className='wn-sec'; h.textContent=clean(m[1]).toUpperCase(); body.appendChild(h); ul=null; continue;
+        }
+        if((m=/^[-*]\s+(.*)$/.exec(l))){
+          if(!ul){ ul=document.createElement('ul'); body.appendChild(ul); }
+          var li=document.createElement('li'); li.textContent=clean(m[1]); ul.appendChild(li); count++;
+        }
+      }
+      if(!count) return;
+      document.getElementById('wnVer').textContent=rel.tag_name||'';
+      box.hidden=false;
     }
 
     try{
@@ -564,9 +694,57 @@
       .then(function(r){ if(!r.ok) throw 0; return r.json(); })
       .then(function(rel){
         apply(rel);
-        try{ sessionStorage.setItem(KEY,JSON.stringify({t:Date.now(),d:{tag_name:rel.tag_name,published_at:rel.published_at,assets:(rel.assets||[]).map(function(a){return{name:a.name,size:a.size,browser_download_url:a.browser_download_url};})}})); }catch(e){}
+        try{ sessionStorage.setItem(KEY,JSON.stringify({t:Date.now(),d:{tag_name:rel.tag_name,published_at:rel.published_at,body:rel.body,assets:(rel.assets||[]).map(function(a){return{name:a.name,size:a.size,browser_download_url:a.browser_download_url};})}})); }catch(e){}
       })
       .catch(function(){ /* остаётся ссылка на страницу Releases */ });
+  })();
+</script>
+<script>
+  // Пиксельный мир в макете: тот же приём, что в самом лаунчере. Рисуется один раз на маленьком
+  // canvas и растягивается без сглаживания, поэтому выглядит «блочно» и почти ничего не стоит.
+  (function(){
+    var cv=document.getElementById('mockScene'); if(!cv||!cv.getContext) return;
+    var box=cv.parentNode, ctx=cv.getContext('2d'), PX=3;
+    function rng(seed){var a=seed>>>0;return function(){a=(a+0x6d2b79f5)>>>0;var t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
+    function mix(a,b,t){return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}
+    function rgb(c,a){return'rgba('+Math.round(c[0])+','+Math.round(c[1])+','+Math.round(c[2])+','+(a==null?1:a)+')';}
+    function noiseFn(cols,r){function oct(step){var pts=[];for(var i=0;i<Math.ceil(cols/step)+3;i++)pts.push(r());return function(x){var i=Math.floor(x/step),t=x/step-i,s=t*t*(3-2*t);return pts[i]*(1-s)+pts[i+1]*s;};}var big=oct(46),small=oct(15);return function(x){return .68*big(x)+.32*small(x);};}
+    var A1=[108,140,255],A2=[160,108,255],A3=[63,208,255];
+    function draw(){
+      var W=Math.max(40,Math.ceil(box.clientWidth/PX)), H=Math.max(40,Math.ceil(box.clientHeight/PX));
+      cv.width=W; cv.height=H; ctx.imageSmoothingEnabled=false;
+      var r=rng(20261025), top=[4,6,12], mid=[8,12,24], hor=mix([12,17,34],A1,.2), y, i;
+      for(y=0;y<H;y++){var t=y/(H-1), c=t<.55?mix(top,mid,t/.55):mix(mid,hor,(t-.55)/.45); ctx.fillStyle=rgb(c); ctx.fillRect(0,y,W,1);}
+      var sc=Math.round(W*H/330);
+      for(i=0;i<sc;i++){var x=Math.floor(r()*W), yy=Math.floor(Math.pow(r(),1.5)*H*.7), b=r(); ctx.fillStyle=rgb(b>.9?mix([255,255,255],A3,.35):[200,212,240],.18+b*.6); ctx.fillRect(x,yy,1,1);}
+      var moon=11, mx=Math.round(W*.8), my=Math.round(H*.15);
+      var halo=ctx.createRadialGradient(mx+moon/2,my+moon/2,2,mx+moon/2,my+moon/2,46); halo.addColorStop(0,rgb(mix([210,222,255],A3,.35),.2)); halo.addColorStop(1,rgb(A3,0));
+      ctx.fillStyle=halo; ctx.fillRect(mx-50,my-50,moon+100,moon+100);
+      ctx.fillStyle=rgb([222,230,247]); ctx.fillRect(mx,my,moon,moon);
+      ctx.fillStyle=rgb([196,207,232]); [[2,2,3,2],[7,1,2,3],[4,6,3,3],[8,8,2,2],[1,8,2,2]].forEach(function(q){ctx.fillRect(mx+q[0],my+q[1],q[2],q[3]);});
+      ctx.fillStyle=rgb([246,249,255]); ctx.fillRect(mx,my,moon,1); ctx.fillRect(mx,my,1,moon);
+      var layers=[{base:.30,amp:.20,bw:4,color:mix([11,17,34],A1,.12),rim:.30},{base:.19,amp:.15,bw:4,color:mix([8,12,25],A2,.10),rim:.20},{base:.08,amp:.10,bw:3,color:mix([5,7,14],A1,.05),rim:0}], front=[];
+      layers.forEach(function(L,li){
+        var n=noiseFn(W,r);
+        for(var x=0;x<W;x+=L.bw){var h=(L.base+L.amp*n(x))*H; h=Math.round(h/2)*2; var y0=H-h; ctx.fillStyle=rgb(L.color); ctx.fillRect(x,y0,L.bw,h);
+          if(L.rim>0){ctx.fillStyle=rgb(A3,L.rim*.5); ctx.fillRect(x,y0,L.bw,1);} if(li===2) front.push([x,y0]);}
+        if(li<2){var hz=ctx.createLinearGradient(0,H*(.55-li*.1),0,H); hz.addColorStop(0,rgb(hor,0)); hz.addColorStop(1,rgb(hor,.16)); ctx.fillStyle=hz; ctx.fillRect(0,H*(.55-li*.1),W,H);}
+      });
+      var tc=mix([5,7,14],A1,.1), placed=[];
+      for(i=0;i<9;i++){var p=front[Math.floor(r()*front.length)]; if(!p) continue; var tx=p[0], ty=p[1]; if(placed.some(function(q){return Math.abs(q-tx)<34;})) continue; placed.push(tx);
+        var k=2; ctx.fillStyle=rgb(tc); ctx.fillRect(tx,ty-4*k,k,4*k); ctx.fillRect(tx-2*k,ty-6*k,5*k,2*k); ctx.fillRect(tx-k,ty-8*k,3*k,2*k);}
+      [.28,.62].forEach(function(f){var p=front[Math.min(front.length-1,Math.floor(front.length*f))]; if(!p) return; var x=p[0], y=p[1];
+        var g=ctx.createRadialGradient(x+1,y-6,1,x+1,y-6,20); g.addColorStop(0,'rgba(255,176,70,.26)'); g.addColorStop(1,'rgba(255,176,70,0)'); ctx.fillStyle=g; ctx.fillRect(x-22,y-28,46,46);
+        ctx.fillStyle=rgb([54,36,22]); ctx.fillRect(x,y-5,2,5); ctx.fillStyle=rgb([255,190,80]); ctx.fillRect(x,y-8,2,3); ctx.fillStyle=rgb([255,240,170]); ctx.fillRect(x,y-8,1,1);});
+    }
+    function particles(){
+      var r=rng(777), st=document.getElementById('mockStars'), em=document.getElementById('mockEmbers'), i, e;
+      for(i=0;i<14;i++){e=document.createElement('i'); e.style.left=(r()*100).toFixed(1)+'%'; e.style.top=(r()*55).toFixed(1)+'%'; e.style.setProperty('--dur',(3+r()*5).toFixed(1)+'s'); e.style.setProperty('--delay',(-r()*8).toFixed(1)+'s'); st.appendChild(e);}
+      var cols=['#6c8cff','#a06cff','#3fd0ff'];
+      for(i=0;i<7;i++){e=document.createElement('i'); e.style.left=(r()*100).toFixed(1)+'%'; e.style.setProperty('--dur',(14+r()*12).toFixed(1)+'s'); e.style.setProperty('--delay',(-r()*24).toFixed(1)+'s'); e.style.setProperty('--dx',((r()-.5)*90).toFixed(0)+'px'); e.style.setProperty('--c',cols[i%3]); em.appendChild(e);}
+    }
+    draw(); particles();
+    var tm; window.addEventListener('resize',function(){clearTimeout(tm); tm=setTimeout(draw,200);});
   })();
 </script>
 <script>
