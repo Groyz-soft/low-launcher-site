@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LOW Launcher — лаунчер Minecraft с Ely.by, менеджером модов и темами</title>
-<meta name="description" content="LOW Launcher — сторонний лаунчер Minecraft: вход через Ely.by, изолированные сборки, менеджер модов Modrinth, автообновление, Discord Rich Presence." />
+<title>LOW Launcher — лаунчер Minecraft с входом через Microsoft и Ely.by, менеджером модов и темами</title>
+<meta name="description" content="LOW Launcher — сторонний лаунчер Minecraft: вход через Microsoft и Ely.by, изолированные сборки, менеджер модов Modrinth, автообновление, Discord Rich Presence." />
 <link rel="icon" href="favicon.ico?v=1" sizes="32x32">
 <link rel="icon" href="favicon.svg?v=1" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=1">
@@ -15,8 +15,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LOW Launcher">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:title" content="LOW Launcher — лаунчер Minecraft с Ely.by, менеджером модов и темами">
-<meta property="og:description" content="LOW Launcher — сторонний лаунчер Minecraft: вход через Ely.by, изолированные сборки, менеджер модов Modrinth, автообновление, Discord Rich Presence.">
+<meta property="og:title" content="LOW Launcher — лаунчер Minecraft с входом через Microsoft и Ely.by, менеджером модов и темами">
+<meta property="og:description" content="LOW Launcher — сторонний лаунчер Minecraft: вход через Microsoft и Ely.by, изолированные сборки, менеджер модов Modrinth, автообновление, Discord Rich Presence.">
 <meta property="og:url" content="https://www.lowlauncher.ru/">
 <meta property="og:image" content="https://www.lowlauncher.ru/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -240,6 +240,8 @@
   .dl h2{font-size:26px; font-weight:800; margin-bottom:10px;}
   .dl p{color:var(--dim); font-size:14.5px; max-width:420px;}
   .dl-note{display:block; font-size:12.5px; color:var(--dim-2); max-width:440px; margin-top:14px; line-height:1.6;}
+  .soon{display:inline-block; margin-left:8px; padding:2px 8px; border-radius:6px; font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.3px; color:var(--a3); background:rgba(63,208,255,.1); border:1px solid rgba(63,208,255,.3); vertical-align:middle;}
+  .soon-note{margin-top:12px; max-width:520px; font-size:12.5px; color:var(--dim-2);}
   .dl-version{font-family:var(--mono); font-size:12px; color:var(--a3); margin-top:14px; display:block;}
 
 
@@ -390,7 +392,7 @@
   <header class="hero">
     <div>
       <div class="eyebrow">СТОРОННИЙ ЛАУНЧЕР MINECRAFT</div>
-      <h1>Заходишь под своим ником <span>на Ely.by</span> — играешь и не паришься</h1>
+      <h1>Заходишь через <span>Microsoft или Ely.by</span> — играешь и не паришься</h1>
       <p class="lead">
         Вход через браузер без пароля в лаунчере, отдельные сборки под каждую версию с изолированными модами,
         встроенный поиск модов и модпаков — и ничего лишнего сверху.
@@ -400,6 +402,7 @@
         <a class="btn btn-ghost" href="https://github.com/Groyz-soft/low-launcher" target="_blank" rel="noopener">Смотреть на GitHub</a>
       </div>
       <div class="hero-note">Windows 10/11 · бесплатно · автообновление без напоминаний</div>
+      <div class="soon-note">Вход через Microsoft появится после одобрения заявки в Mojang — пока доступны оффлайн-режим и Ely.by.</div>
     </div>
 
     <div class="mock" aria-hidden="true">
@@ -479,6 +482,10 @@
     <div class="feat-group reveal">
       <div class="feat-cat">АККАУНТ</div>
       <div class="feat-list">
+        <div class="feat-item">
+          <h3>Вход через Microsoft <span class="soon">скоро</span></h3>
+          <p>Играйте на лицензионном Minecraft: Java Edition. Вход открывается на официальной странице Microsoft в браузере — пароль лаунчер не видит. Заработает после одобрения заявки в Mojang.</p>
+        </div>
         <div class="feat-item">
           <h3>Вход через Ely.by</h3>
           <p>Авторизация открывается в системном браузере — пароль остаётся на сайте Ely.by, лаунчер его не видит.</p>
@@ -610,6 +617,7 @@
     <p class="disclaimer">
       LOW Launcher не связан с Mojang AB, Microsoft или Minecraft и не одобрен ими. «Minecraft» — товарный знак Mojang Synergies AB / Microsoft.
       LOW Launcher — независимый инструмент для запуска игры, использующий официальные ресурсы Mojang для загрузки версий Minecraft; сами файлы игры не изменяются и не распространяются в составе лаунчера.
+      Вход через Microsoft выполняется на официальной странице Microsoft; пароль в лаунчер не передаётся. Для игры на лицензии требуется купленная Minecraft: Java Edition.
       Поддержка стороннего входа реализована через открытый протокол Ely.by — независимый сервис учётных записей.
     </p>
     <div class="footer-row" style="margin-top:26px">

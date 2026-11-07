@@ -1,7 +1,7 @@
 {
   "name": "LOW Launcher",
   "short_name": "LOW Launcher",
-  "description": "Лаунчер Minecraft с Ely.by, менеджером модов и темами",
+  "description": "Лаунчер Minecraft с входом через Microsoft и Ely.by, менеджером модов и темами",
   "lang": "ru",
   "start_url": "./",
   "display": "browser",
